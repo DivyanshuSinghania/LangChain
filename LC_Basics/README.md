@@ -24,9 +24,9 @@ git clone <repository-url>
 cd LC_Basics
 ```
 
-2. Install dependencies:
+2. Install dependencies using uv:
 ```bash
-pip install -r requirements.txt
+uv pip install -e .
 ```
 
 3. Set up your environment variables:
@@ -110,8 +110,5 @@ LC_Basics/
 
 ## License
 
-[Your License Here]
 
 ## Contributing
-
-[Your Contributing Guidelines Here]
