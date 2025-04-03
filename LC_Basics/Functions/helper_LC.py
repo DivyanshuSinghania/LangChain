@@ -27,10 +27,10 @@ async def translate(fromlanguage: str, tolanguage: str, text: str, model = None)
         model -> a model to run on.
     """
     
-    if model == None:
-        model = init_chat_model(model="gpt-4o-mini", model_provider="openai")
+    if model == None or model == "":
+        model = init_chat_model("gpt-4o-mini", model_provider="openai")
     else:
-        model = init_chat_model(model=model, model_provider="openai")
+        model = init_chat_model(model, model_provider="openai")
 
     prompt = await translate_prompt(fromlanguage, tolanguage, text)
 
@@ -47,14 +47,16 @@ async def batch_translate(input: translateInput) -> str:
     """
     
     tasks = []
-    for i, fromlanguage, tolanguage, text, model in enumerate(zip(input.fromlanguage, input.tolanguage, input.text, input.model)):
+    for fromlanguage, tolanguage, text, model in zip(input.fromlanguage, input.tolanguage, input.text, input.model):
         tasks.append(translate(fromlanguage, tolanguage, text, model))
     
     # Run all in parallel but wait for slowest process
-    # results = await asyncio.gather(*tasks)
+    # It retains order tasks
+    results = await asyncio.gather(*tasks)
 
     # Run all in parallel but dont wait for the slowest process
+    # Losses task order
     # freeing up more cpu to contri in other tasks
-    results = await asyncio.as_completed(*tasks) 
+    # results = [await task for task in asyncio.as_completed(tasks)]
 
     return results

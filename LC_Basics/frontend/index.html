@@ -22,8 +22,14 @@
     <p id="singleResult"></p>
     
     <h2>Batch Translation</h2>
-    <label>JSON Input:</label>
-    <textarea id="batchInput" rows="5" cols="50"></textarea>
+    <label>From Language:</label>
+    <input type="text" id="batchFromLang">
+    <label>To Language:</label>
+    <input type="text" id="batchToLang">
+    <label>Enter words (comma separated):</label>
+    <input type="text" id="batchWords">
+    <label>Model:</label>
+    <input type="text" id="batchModel">
     <button onclick="batchTranslate()">Translate</button>
     <p id="batchResult"></p>
     
@@ -34,18 +40,32 @@
             const text = document.getElementById('text').value;
             const model = document.getElementById('model').value;
             
+            console.log("Single Translate Input:", { fromLang, toLang, text, model });
+            
             const response = await fetch(`/single_translate?fromlanguage=${fromLang}&tolanguage=${toLang}&text=${text}&model=${model}`);
             const result = await response.json();
             document.getElementById('singleResult').innerText = JSON.stringify(result);
         }
         
         async function batchTranslate() {
-            const inputData = document.getElementById('batchInput').value;
+            const fromLang = document.getElementById('batchFromLang').value;
+            const toLang = document.getElementById('batchToLang').value;
+            const words = document.getElementById('batchWords').value.split(',').map(word => word.trim());
+            const model = document.getElementById('batchModel').value;
+            
+            const inputData = {
+                fromlanguage: Array(words.length).fill(fromLang),
+                tolanguage: Array(words.length).fill(toLang),
+                text: words,
+                model: Array(words.length).fill(model)
+            };
+            
+            console.log("Batch Translate Input:", inputData);
             
             const response = await fetch('/batch_translate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: inputData
+                body: JSON.stringify(inputData)
             });
             
             const result = await response.json();

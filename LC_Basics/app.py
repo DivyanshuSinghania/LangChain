@@ -28,7 +28,7 @@ async def translate_(fromlanguage: str, tolanguage: str, text: str, model:str):
     return await translate(fromlanguage, tolanguage, text, model)
 
 # Batch Translation
-@app.get("/batch_translate")
+@app.post("/batch_translate")
 async def translate_(input: translateInput):
     return await batch_translate(input)
 
