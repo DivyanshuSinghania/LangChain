@@ -6,7 +6,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 
 
-def translate_prompt(fromlanguage, tolanguage, text):
+async def translate_prompt(fromlanguage, tolanguage, text):
     """
     This Function prepares a prompt for Translation.
     Args:
@@ -21,5 +21,5 @@ def translate_prompt(fromlanguage, tolanguage, text):
         [("system", system_template), ("user", "{text}")]
     )
 
-    translate_prompt = prompt_template.invoke({"fromlanguage": f"{fromlanguage}", "tolanguage": f"{tolanguage}", "text": f"{text}"})
+    translate_prompt = await prompt_template.ainvoke({"fromlanguage": f"{fromlanguage}", "tolanguage": f"{tolanguage}", "text": f"{text}"})
     return translate_prompt
