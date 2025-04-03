@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from typeModels.models import translateInput
 
 from langchain.chat_models import init_chat_model
-from ..Prompts.prompt_LC import translate_prompt
+from Prompts.prompt_LC import translate_prompt
 
 # Setting Enviorment
 ENV_PATH = "/Users/divyanshusinghania/Documents/Github/LangChain/.env"

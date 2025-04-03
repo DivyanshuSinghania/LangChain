@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Service</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Translation Service</h1>
+    
+    <h2>Single Translation</h2>
+    <label>From Language:</label>
+    <input type="text" id="fromLang">
+    <label>To Language:</label>
+    <input type="text" id="toLang">
+    <label>Text:</label>
+    <input type="text" id="text">
+    <label>Model:</label>
+    <input type="text" id="model">
+    <button onclick="singleTranslate()">Translate</button>
+    <p id="singleResult"></p>
+    
+    <h2>Batch Translation</h2>
+    <label>JSON Input:</label>
+    <textarea id="batchInput" rows="5" cols="50"></textarea>
+    <button onclick="batchTranslate()">Translate</button>
+    <p id="batchResult"></p>
+    
+    <script>
+        async function singleTranslate() {
+            const fromLang = document.getElementById('fromLang').value;
+            const toLang = document.getElementById('toLang').value;
+            const text = document.getElementById('text').value;
+            const model = document.getElementById('model').value;
+            
+            const response = await fetch(`/single_translate?fromlanguage=${fromLang}&tolanguage=${toLang}&text=${text}&model=${model}`);
+            const result = await response.json();
+            document.getElementById('singleResult').innerText = JSON.stringify(result);
+        }
+        
+        async function batchTranslate() {
+            const inputData = document.getElementById('batchInput').value;
+            
+            const response = await fetch('/batch_translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: inputData
+            });
+            
+            const result = await response.json();
+            document.getElementById('batchResult').innerText = JSON.stringify(result);
+        }
+    </script>
+</body>
+</html>

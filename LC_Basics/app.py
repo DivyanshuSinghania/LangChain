@@ -1,15 +1,26 @@
 from Functions.helper_LC import translate, batch_translate
 from typeModels.models import translateInput
-from typing import Union
+
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from starlette.requests import Request
 
 from fastapi import FastAPI
 
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+# Serve static files (CSS, JS)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Templates
+templates = Jinja2Templates(directory="frontend")
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 
 # Single Translation
 @app.get("/single_translate")
